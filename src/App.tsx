@@ -4,20 +4,28 @@ import mechanicImage from './assets/images/regenerated_image_1780110939496.png';
 
 export default function App() {
   const [isContactModalOpen, setIsContactModalOpen] = useState(false);
+  const [selectedImage, setSelectedImage] = useState<string | null>(null);
 
   return (
     <div className="min-h-screen bg-[#050505] text-white overflow-x-hidden pt-20">
       <Navbar onOpenContact={() => setIsContactModalOpen(true)} />
       
       <main>
-        <HeroSection onOpenContact={() => setIsContactModalOpen(true)} />
-        <ServicesSection />
+        <HeroSection 
+          onOpenContact={() => setIsContactModalOpen(true)} 
+          onImageClick={setSelectedImage} 
+        />
+        <ServicesSection onImageClick={setSelectedImage} />
       </main>
 
       <Footer />
 
       {isContactModalOpen && (
         <ContactModal onClose={() => setIsContactModalOpen(false)} />
+      )}
+
+      {selectedImage && (
+        <ImageModal image={selectedImage} onClose={() => setSelectedImage(null)} />
       )}
     </div>
   );
@@ -96,7 +104,7 @@ function NavLinks({ mobile, onClick }: { mobile?: boolean, onClick?: () => void 
   );
 }
 
-function HeroSection({ onOpenContact }: { onOpenContact: () => void }) {
+function HeroSection({ onOpenContact, onImageClick }: { onOpenContact: () => void, onImageClick: (url: string) => void }) {
   return (
     <section id="home" className="relative w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 lg:py-20 lg:min-h-[80vh] flex flex-col lg:flex-row items-center">
       {/* Background graphic effect (subtle) */}
@@ -151,17 +159,41 @@ function HeroSection({ onOpenContact }: { onOpenContact: () => void }) {
       <div className="w-full lg:w-1/2 mt-12 lg:mt-0 z-10 relative">
         <div className="grid grid-cols-2 gap-3 pb-8">
           {/* Collage simulation */}
-          <div className="aspect-[4/3] bg-gray-800 rounded relative overflow-hidden border border-gray-700 col-span-2 group">
+          <div 
+            className="aspect-[4/3] bg-gray-800 rounded relative overflow-hidden border border-gray-700 col-span-2 group cursor-pointer"
+            onClick={() => onImageClick(mechanicImage)}
+          >
              <img src={mechanicImage} alt="Mechanic truck" className="object-cover w-full h-full opacity-60 group-hover:opacity-80 transition-opacity" />
              <div className="absolute inset-0 bg-blue-900/20 mix-blend-overlay"></div>
+             <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+               <div className="bg-black/50 p-3 rounded-full backdrop-blur-sm">
+                 <ArrowRight className="w-6 h-6 text-white" />
+               </div>
+             </div>
           </div>
-          <div className="aspect-square bg-gray-800 rounded relative overflow-hidden border border-gray-700 group">
+          <div 
+            className="aspect-square bg-gray-800 rounded relative overflow-hidden border border-gray-700 group cursor-pointer"
+            onClick={() => onImageClick("https://images.unsplash.com/photo-1504307651254-35680f356f12?q=80&w=1200&h=1200&fit=crop")}
+          >
              <img src="https://images.unsplash.com/photo-1504307651254-35680f356f12?q=80&w=600&h=600&fit=crop" alt="Construction scaffolding" className="object-cover w-full h-full opacity-60 group-hover:opacity-80 transition-opacity" />
              <div className="absolute inset-0 bg-blue-900/20 mix-blend-overlay"></div>
+             <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+               <div className="bg-black/50 p-2 rounded-full backdrop-blur-sm">
+                 <ArrowRight className="w-5 h-5 text-white" />
+               </div>
+             </div>
           </div>
-          <div className="aspect-square bg-gray-800 rounded relative overflow-hidden border border-gray-700 group">
+          <div 
+            className="aspect-square bg-gray-800 rounded relative overflow-hidden border border-gray-700 group cursor-pointer"
+            onClick={() => onImageClick("https://images.unsplash.com/photo-1621905252507-b35492d0402e?q=80&w=1200&h=1200&fit=crop")}
+          >
              <img src="https://images.unsplash.com/photo-1621905252507-b35492d0402e?q=80&w=600&h=600&fit=crop" alt="Carpentry tools" className="object-cover w-full h-full opacity-60 group-hover:opacity-80 transition-opacity" />
              <div className="absolute inset-0 bg-blue-900/20 mix-blend-overlay"></div>
+             <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+               <div className="bg-black/50 p-2 rounded-full backdrop-blur-sm">
+                 <ArrowRight className="w-5 h-5 text-white" />
+               </div>
+             </div>
           </div>
         </div>
         {/* Decorative corner borders */}
@@ -172,7 +204,7 @@ function HeroSection({ onOpenContact }: { onOpenContact: () => void }) {
   );
 }
 
-function ServicesSection() {
+function ServicesSection({ onImageClick }: { onImageClick: (url: string) => void }) {
   const cards = [
     {
       title: "MECHANIC SERVICES",
@@ -186,7 +218,8 @@ function ServicesSection() {
         "Heavy-Duty & Fleet Service",
         "General Repairs"
       ],
-      img: "https://images.unsplash.com/photo-1619642751034-765dfdf7c58e?q=80&w=600&h=400&fit=crop"
+      img: "https://images.unsplash.com/photo-1619642751034-765dfdf7c58e?q=80&w=600&h=400&fit=crop",
+      fullImg: "https://images.unsplash.com/photo-1619642751034-765dfdf7c58e?q=80&w=1200&h=800&fit=crop"
     },
     {
       title: "CARPENTRY & CONSTRUCTION",
@@ -200,7 +233,8 @@ function ServicesSection() {
         "Tenant Improvements",
         "Industrial & Commercial Projects"
       ],
-      img: "https://images.unsplash.com/photo-1541888086925-920a061d4b68?q=80&w=600&h=400&fit=crop"
+      img: "https://images.unsplash.com/photo-1541888086925-920a061d4b68?q=80&w=600&h=400&fit=crop",
+      fullImg: "https://images.unsplash.com/photo-1541888086925-920a061d4b68?q=80&w=1200&h=800&fit=crop"
     },
     {
       title: "SKILLED TRADES",
@@ -214,7 +248,8 @@ function ServicesSection() {
         "Multi-Skill Trade Support",
         "Budget-Focused Solutions"
       ],
-      img: "https://images.unsplash.com/photo-1581092580497-e0d23cbdf1dc?q=80&w=600&h=400&fit=crop"
+      img: "https://images.unsplash.com/photo-1581092580497-e0d23cbdf1dc?q=80&w=600&h=400&fit=crop",
+      fullImg: "https://images.unsplash.com/photo-1581092580497-e0d23cbdf1dc?q=80&w=1200&h=800&fit=crop"
     },
     {
       title: "WEB DEVELOPMENT",
@@ -228,7 +263,8 @@ function ServicesSection() {
         "Hosting & Maintenance",
         "Technical Consulting"
       ],
-      img: "https://images.unsplash.com/photo-1498050108023-c5249f4df085?q=80&w=600&h=400&fit=crop"
+      img: "https://images.unsplash.com/photo-1498050108023-c5249f4df085?q=80&w=600&h=400&fit=crop",
+      fullImg: "https://images.unsplash.com/photo-1498050108023-c5249f4df085?q=80&w=1200&h=800&fit=crop"
     }
   ];
 
@@ -258,8 +294,16 @@ function ServicesSection() {
                </ul>
 
                <div className="mt-auto">
-                 <div className="h-32 w-full overflow-hidden rounded border border-gray-800 mb-4 opacity-70 sepia-[0.3]">
-                   <img src={card.img} alt={card.title} className="w-full h-full object-cover" />
+                 <div 
+                   className="h-32 w-full overflow-hidden rounded border border-gray-800 mb-4 opacity-70 sepia-[0.3] cursor-pointer group/img relative"
+                   onClick={() => onImageClick(card.fullImg)}
+                 >
+                   <img src={card.img} alt={card.title} className="w-full h-full object-cover transition-transform duration-500 group-hover/img:scale-110" />
+                   <div className="absolute inset-0 bg-black/40 opacity-0 group-hover/img:opacity-100 transition-opacity flex items-center justify-center">
+                     <div className="bg-black/60 p-2 rounded-full backdrop-blur-sm border border-gray-600">
+                       <ArrowRight className="w-5 h-5 text-white" />
+                     </div>
+                   </div>
                  </div>
                  <button className="flex items-center justify-center gap-2 w-full py-3 bg-[#1a1a1a] border border-gray-800 hover:bg-gray-800 hover:border-gray-600 text-white font-oswald tracking-widest text-sm rounded transition-colors group">
                     LEARN MORE <ArrowRight className="w-4 h-4 text-blue-500 group-hover:translate-x-1 transition-transform" />
@@ -381,6 +425,27 @@ function Footer() {
          <p className="text-gray-600 font-sans text-sm">&copy; {new Date().getFullYear()} Breaux & Sons. All rights reserved.</p>
       </div>
     </footer>
+  );
+}
+
+function ImageModal({ image, onClose }: { image: string, onClose: () => void }) {
+  return (
+    <div className="fixed inset-0 z-[110] flex items-center justify-center p-4 md:p-8 animate-in fade-in duration-200">
+      <div className="absolute inset-0 bg-black/95 backdrop-blur-md" onClick={onClose}></div>
+      <div className="relative w-full max-w-5xl max-h-[90vh] flex flex-col items-center justify-center zoom-in-95 duration-300">
+        <button 
+          onClick={onClose} 
+          className="absolute -top-12 right-0 md:-right-12 md:top-0 p-3 bg-black/50 text-white hover:text-blue-400 rounded-full hover:bg-gray-800 transition-colors border border-gray-700/50 backdrop-blur-sm z-10"
+        >
+          <X className="w-6 h-6" />
+        </button>
+        <img 
+          src={image} 
+          alt="Full screen view" 
+          className="w-auto h-auto max-w-full max-h-[85vh] object-contain rounded border border-gray-800 shadow-2xl" 
+        />
+      </div>
+    </div>
   );
 }
 
